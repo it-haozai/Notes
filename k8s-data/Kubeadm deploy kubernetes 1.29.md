@@ -1,5 +1,7 @@
 # Kubeadm Deploy Kubernetes 1.29
 
+[TOC]
+
 ## 1.`Kubeadm` 相关介绍
 
 `kubeadm`是`Kubernetes`官方提供的用于快速安部署`Kubernetes`集群的工具，伴随`Kubernetes`每个版本的发布都会同步更新，`kubeadm`会对集群配置方面的一些实践做调整，通过实验`kubeadm`可以学习到`Kubernetes`官方在集群配置上一些新的最佳实践。
@@ -53,6 +55,8 @@ swapoff -a
 ```
 
 > 修改`/etc/fstab`文件，注释掉 `SWAP` 的自动挂载，使用`free -m`确认`swap`已经关闭
+
+![image-20240902141605073](https://raw.githubusercontent.com/it-haozai/Pictures/main/img/image-20240902141605073.png)
 
 
 
@@ -161,6 +165,8 @@ sysctl net.bridge.bridge-nf-call-iptables net.bridge.bridge-nf-call-ip6tables ne
 ```
 
 ## 6.部署`Nginx`+`Keepalived`高可用负载均衡器
+
+![image-20240902141523035](https://raw.githubusercontent.com/it-haozai/Pictures/main/img/image-20240902141523035.png)
 
 ### 安装`epel-release`
 
@@ -783,3 +789,40 @@ kubeadm config images pull
 kubeadm init --config kubeadm-init.log-config.yaml >> kubeadm-init.log
 ```
 
+```shell
+Your Kubernetes control-plane has initialized successfully!
+
+To start using your cluster, you need to run the following as a regular user:
+
+  mkdir -p $HOME/.kube
+  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+  sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+Alternatively, if you are the root user, you can run:
+
+  export KUBECONFIG=/etc/kubernetes/admin.conf
+
+You should now deploy a pod network to the cluster.
+Run "kubectl apply -f [podnetwork].yaml" with one of the options listed at:
+  https://kubernetes.io/docs/concepts/cluster-administration/addons/
+
+You can now join any number of control-plane nodes by copying certificate authorities
+and service account keys on each node and then running the following as root:
+
+  kubeadm join 192.168.110.254:8443 --token abcdef.0123456789abcdef \
+        --discovery-token-ca-cert-hash sha256:62ea33761f845c9a810ac0ed596dcc61af23e9807ea8a34f7274c47f9682b8fb \
+        --control-plane 
+
+Then you can join any number of worker nodes by running the following on each as root:
+
+kubeadm join 192.168.110.254:8443 --token abcdef.0123456789abcdef \
+        --discovery-token-ca-cert-hash sha256:62ea33761f845c9a810ac0ed596dcc61af23e9807ea8a34f7274c47f9682b8fb
+```
+
+## 10.部署`Calico`网络组建
+
+[https://docs.tigera.io/calico/latest/getting-started/kubernetes/self-managed-onprem/onpremises](https://docs.tigera.io/calico/latest/getting-started/kubernetes/self-managed-onprem/onpremises)
+
+如果使用的是 `Pod cidr` ，请跳至下一步。 如果在 `kubeadm` 中使用不同的 `Pod CIDR`，则无需更改 `Calico` 将根据运行配置自动检测 `CIDR`。 对于其他平台，请确保在清单中取消注释 `CALICO_IPV4POOL_CIDR` 变量，并将其设置为与您选择的 `Pod CIDR` 相同的值。`192.168.0.0/16`
+
+![image-20240902144503174](https://raw.githubusercontent.com/it-haozai/Pictures/main/img/image-20240902144503174.png)

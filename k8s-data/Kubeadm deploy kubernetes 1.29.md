@@ -554,7 +554,7 @@ ETCDCTL_API=3 /usr/local/bin/etcdctl \
 endpoint health
 ```
 
-## 8.部署容器运行时Containerd
+## 8.部署容器运行时`Containerd`
 
 > 1. 在各个服务器节点上安装容器运行时`Containerd`
 >

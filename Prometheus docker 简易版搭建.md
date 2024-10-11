@@ -25,3 +25,17 @@ docker run -d \
   grafana/grafana
 ```
 
+
+
+```shell
+docker run -d \
+  --name node-exporter \
+  --net="host" \
+  -p 9100:9100 \
+  -v "/proc:/host/proc:ro" \
+  -v "/sys:/host/sys:ro" \
+  -v "/:/rootfs:ro" \
+  --restart unless-stopped \
+  prom/node-exporter
+```
+
